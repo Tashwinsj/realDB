@@ -26,19 +26,33 @@ func main(){
 		if err != nil {
 			fmt.Println("Connection error : ", err) 
 			continue
-		}
+		} 
+		conn.Write([]byte( 
+		`
+.-----------------------------------------------------------.
+|                                                           |
+|     ██████╗ ███████╗ █████╗ ██╗      ██████╗ ██████╗      |
+|     ██╔══██╗██╔════╝██╔══██╗██║      ██╔══██╗██╔══██╗     |
+|     ██████╔╝█████╗  ███████║██║█████╗██║  ██║██████╔╝     |
+|     ██╔══██╗██╔══╝  ██╔══██║██║╚════╝██║  ██║██╔══██╗     |
+|     ██║  ██║███████╗██║  ██║███████╗ ██████╔╝██████╔╝     |
+|     ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝      |
+|                                                           |
+|                  Connected to real-db>                    |
+'-----------------------------------------------------------'` + "\n")) 
+		conn.Write([]byte("real-db> "))
+
 		go handleConnection(conn)      // This infinite loop keeps looking for connections and wherever they come a seperate go routine is 
 										// created to handle the request ( seperate go routine for every client connected )
 	}
-
-
-} 
+  
+}
 
 func handleConnection(conn net.Conn){
 	defer conn.Close() // defer lines are executed after everything else is executed in the surrounding fucntion
 	reader := bufio.NewReader(conn)  // buffer reader is required as we are reading from the network , so io system call is optimized for buffers
 
-	for {
+	for {  
 		line , err := reader.ReadString('\n') 
 		if err != nil {
 			removeConnFromWatchers(conn) 
@@ -87,9 +101,12 @@ func handleSet(conn net.Conn , key string , val string ) {
 
 	for _ , watcher := range conns {
 		if watcher != conn { // the setting function is sending out exept to itself !
-			watcher.Write([]byte(fmt.Sprintf("WATCH : key '%s' was update to '%s' \n" , key ,val ))) 
+			watcher.Write([]byte(fmt.Sprintf("WATCH : '%s' ---> '%s' \n" , key ,val ))) 
+			watcher.Write([]byte("real-db> "))
 		}
-	}
+	}  
+	conn.Write([]byte("real-db> "))
+	 
 } 
 
 func handleGet( conn net.Conn , key string ) {
@@ -102,6 +119,7 @@ func handleGet( conn net.Conn , key string ) {
 	} else  {
 		conn.Write([]byte("nil \n"))
 	}
+	conn.Write([]byte("real-db> "))
 } 
 
 func handleWatch(conn net.Conn , key string) {
@@ -110,6 +128,7 @@ func handleWatch(conn net.Conn , key string) {
 	mu.Unlock()	
 
 	conn.Write([]byte("WATCHING " + key + "\n" )) 
+	conn.Write([]byte("real-db> "))
 } 
 
 
