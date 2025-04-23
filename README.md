@@ -1,4 +1,4 @@
-# Real-DB 
+# Real-DB 🧱
 Real-DB is an in-memory real-time database with a focus on high performance, concurrency, and reliability. It aims to provide a feature set similar to Redis, while also incorporating enhancements for improved data management and scalability. Real-DB is suitable for applications requiring fast data access, efficient memory utilization, and reliable data persistence.
 
 ## Concurrency and Reliability 
