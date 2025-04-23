@@ -41,6 +41,7 @@ func handleConnection(conn net.Conn){
 	for {
 		line , err := reader.ReadString('\n') 
 		if err != nil {
+			removeConnFromWatchers(conn) 
 			fmt.Println("Client disconnected")
 			return
 		}
@@ -109,4 +110,24 @@ func handleWatch(conn net.Conn , key string) {
 	mu.Unlock()	
 
 	conn.Write([]byte("WATCHING " + key + "\n" )) 
+} 
+
+
+func removeConnFromWatchers(conn net.Conn) {
+	mu.Lock()
+	defer mu.Unlock()
+
+	for key , conns := range watchers {
+		newConns := make([]net.Conn , 0 , len(conns)) 
+		for _ , c := range conns {
+			if c != conn {
+				newConns = append(newConns, c) 
+			} 
+		} 
+		if len(newConns) == 0 {
+			delete(watchers, key) 
+		} else { 
+			watchers[key] = newConns
+		}
+	}
 }
