@@ -20,6 +20,7 @@ Real-DB is an in-memory real-time database with a focus on high performance, con
 - Pattern matching keys (KEYS pattern*) 
 
 ## Persistence 
+- Basic logging - ✔️ 
 - AOF (Append Only File) logging
 - Snapshot-based persistence (RDB-like)
 - Loading from disk on startup  

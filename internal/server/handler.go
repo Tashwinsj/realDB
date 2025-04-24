@@ -3,9 +3,10 @@ package server
 import ( "net" 
 		"bufio"  
 		"strings" 
-		"fmt"
 		"realDB/internal/db" 
-		// "realDB/cmd/main"
+		// "realDB/cmd/main" 
+		"github.com/sirupsen/logrus"
+
 )
 
 func HandleConnection(conn net.Conn){
@@ -16,7 +17,7 @@ func HandleConnection(conn net.Conn){
 		line , err := reader.ReadString('\n') 
 		if err != nil {
 			db.RemoveConnFromWatchers(conn) 
-			fmt.Println("Client disconnected")
+			logrus.Info("Client disconnected")
 			return
 		}
 

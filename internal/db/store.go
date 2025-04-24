@@ -1,9 +1,11 @@
-package db 
+package db
 
-import ( 
-	"fmt"  
-	"net" 
+import (
+	"fmt"
+	"net"
 	"sync"
+
+	"github.com/sirupsen/logrus"
 ) 
 
 var (
@@ -23,7 +25,8 @@ func HandleSet(conn net.Conn , key string , val string ) {
 			watcher.Write([]byte(fmt.Sprintf("WATCH : '%s' ---> '%s' \n" , key ,val ))) 
 			watcher.Write([]byte("real-db> "))
 		}
-	}  
+	}   
+	logrus.Infof("SET %s %s", key , val )
 	conn.Write([]byte("real-db> "))
 	 
 } 
@@ -37,7 +40,8 @@ func HandleGet( conn net.Conn , key string ) {
 		conn.Write([]byte(fmt.Sprintf("%s \n", val))) 
 	} else  {
 		conn.Write([]byte("nil \n"))
-	}
+	} 
+	logrus.Infof("GET %s", key)
 	conn.Write([]byte("real-db> "))
 }  
 
@@ -52,6 +56,7 @@ func HandleDelete(conn net.Conn , key string ){
 			watcher.Write([]byte(fmt.Sprintf("WATCH : '%s' ---> '%s' \n" , key , "nil" ))) 
 			watcher.Write([]byte("real-db> "))
 		}
-	}
+	} 
+	logrus.Infof("DEL %s", key)
 	conn.Write([]byte("real-db> "))
 }
