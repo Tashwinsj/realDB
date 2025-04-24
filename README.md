@@ -2,7 +2,7 @@
 Real-DB is an in-memory real-time database with a focus on high performance, concurrency, and reliability. It aims to provide a feature set similar to Redis, while also incorporating enhancements for improved data management and scalability. Real-DB is suitable for applications requiring fast data access, efficient memory utilization, and reliable data persistence.
 
 ## Concurrency and Reliability 
-- Proper connection management (Close watchers on disconnect) 
+- Proper connection management (Close watchers on disconnect) - Done
 - Concurrent-safe access with sync.Map or channels 
 - Client timeout/idle disconnection 
 - Logging and structured error handling 

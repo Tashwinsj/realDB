@@ -45,7 +45,13 @@ func HandleConnection(conn net.Conn){
 				conn.Write([]byte("Usage : WATCH key \n"))
 				continue
 			}
-			db.HandleWatch(conn, args[1]) 
+			db.HandleWatch(conn, args[1])  
+		case "DEL" : 
+			if len(args) != 2 {
+				conn.Write([]byte("Usage : DEL key \n")) 
+				continue
+			} 
+			db.HandleDelete(conn , args[1])
 		default : 
 			conn.Write([]byte("Unknow command! \n"))
 			conn.Write([]byte("real-db> "))
