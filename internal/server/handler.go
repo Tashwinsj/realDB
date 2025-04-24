@@ -4,7 +4,8 @@ import ( "net"
 		"bufio"  
 		"strings" 
 		"fmt"
-		"realDB/internal/db"
+		"realDB/internal/db" 
+		// "realDB/cmd/main"
 )
 
 func HandleConnection(conn net.Conn){
@@ -27,6 +28,10 @@ func HandleConnection(conn net.Conn){
 		cmd := strings.ToUpper(args[0]) 
 
 		switch cmd {
+		// case <-  main.ShutdownChan:
+		// 	conn.Write([]byte("SERVER_SHUTDOWN: Real-DB is shutting down.\n"))
+		// 	conn.Close()
+		// 	return
 		case "SET":
 			if len(args) != 3 {
 				conn.Write([]byte("Usage : SET k v \n")) // []byte means we are writing to the connection in small byte level rather than the higher string level	
