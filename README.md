@@ -23,15 +23,17 @@ To get a key
 real-db> $ GET key-string 
 ``` 
 To get real-time data of a particular key
-real-db> $ WATCH key-string
+real-db> $ WATCH key-string 
 
-## Concurrency and Reliability 
+## Functionalities
+
+### Concurrency and Reliability 
 - Proper connection management (Close watchers on disconnect) - ✔️ 
 - Concurrent-safe access with sync.Map or channels 
 - Client timeout/idle disconnection 
 - Logging and structured error handling 
 
-## Core Redis-like Features
+### Core Redis-like Features
 - Key Expiration (SET key value EX 10)
 - DELETE (DEL key) command - ✔️ 
 - Increment/Decrement (INCR, DECR)
@@ -43,18 +45,18 @@ real-db> $ WATCH key-string
     - Sets (SADD , SMEMBERS ) 
 - Pattern matching keys (KEYS pattern*) 
 
-## Persistence 
+### Persistence 
 - Basic logging - ✔️ 
 - AOF (Append Only File) logging
 - Snapshot-based persistence (RDB-like)
 - Loading from disk on startup  
 
-## Performance Features
+### Performance Features
 - LRU cache for memory optimization - ✔️ 
 - Sharding support (manual for now)
 - Compression for large values 
 
-## Pub/Sub
+### Pub/Sub
 - Publish/Subscribe system (PUBLISH, SUBSCRIBE)
 - Keyspace notifications for watchers
 
