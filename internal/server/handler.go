@@ -36,6 +36,7 @@ func HandleConnection(conn net.Conn){
 		case "SET":
 			if len(args) != 3 {
 				conn.Write([]byte("Usage : SET k v \n")) // []byte means we are writing to the connection in small byte level rather than the higher string level	
+				conn.Write([]byte("real-db> "))
 				continue
 			}
 			db.HandleSet(conn , args[1]  , args[2])
@@ -43,18 +44,21 @@ func HandleConnection(conn net.Conn){
 		case "GET":
 			if len(args) != 2 {
 				conn.Write([]byte("Usage : GET key \n")) 
+				conn.Write([]byte("real-db> "))
 				continue
 			}
 			db.HandleGet(conn, args[1])
 		case "WATCH" :
 			if len(args) != 2 {
 				conn.Write([]byte("Usage : WATCH key \n"))
+				conn.Write([]byte("real-db> "))
 				continue
 			}
 			db.HandleWatch(conn, args[1])  
 		case "DEL" : 
 			if len(args) != 2 {
 				conn.Write([]byte("Usage : DEL key \n")) 
+				conn.Write([]byte("real-db> "))
 				continue
 			} 
 			db.HandleDelete(conn , args[1])

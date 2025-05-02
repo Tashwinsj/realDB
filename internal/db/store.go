@@ -4,19 +4,20 @@ import (
 	"fmt"
 	"net"
 	"sync"
-
-	"github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus" 
+	"realDB/internal/cache"
 ) 
 
+
 var (
-	store 	 = make(map[string]string) // key value store 
+	lru = cache.NewLRUCache(25)
 	watchers = make(map[string][]net.Conn) 
 	mu		 	sync.RWMutex // synchornous mutex allows only one goroutine to lock and unlock at once
 )
 
 func HandleSet(conn net.Conn , key string , val string ) {
 	mu.Lock() 
-	store[key] = val 
+	lru.Set(key , val)
 	conns := watchers[key]
 	mu.Unlock()  
 
@@ -33,7 +34,7 @@ func HandleSet(conn net.Conn , key string , val string ) {
 
 func HandleGet( conn net.Conn , key string ) {
 	mu.RLock()
-	val , ok := store[key] 
+	val , ok :=  lru.Get(key)
 	mu.RUnlock()
 
 	if ok {
@@ -48,7 +49,7 @@ func HandleGet( conn net.Conn , key string ) {
 func HandleDelete(conn net.Conn , key string ){
 	mu.Lock()  
 	conns := watchers[key]
-	delete(store, key) 
+	lru.Del(key)
 	mu.Unlock()  
 
 	for _ , watcher :=  range conns { 
