@@ -1,5 +1,29 @@
-# Real-DB 🧱
-Real-DB is an in-memory real-time database with a focus on high performance, concurrency, and reliability. It aims to provide a feature set similar to Redis, while also incorporating enhancements for improved data management and scalability. Real-DB is suitable for applications requiring fast data access, efficient memory utilization, and reliable data persistence.
+# Real-DB 🧱 
+### About Real-DB
+Real-DB is an in-memory real-time database with a focus on high performance, concurrency, and reliability. It aims to provide a feature set similar to Redis, while also incorporating enhancements for improved data management and scalability. Real-DB is suitable for applications requiring fast data access, efficient memory utilization, and reliable data persistence. 
+ 
+## Get Started  
+### Setting up Real-DB with Docker 
+Quick way to setup Real-DB is through running this commmand 
+```
+docker run -p 6369:6369 tashwinsj/real-db:latest 
+``` 
+### Connecting to the DB 
+From another terminal window run this command to connect as a database client 
+```
+$ nc localhost 6369
+``` 
+### Usage example 
+To set a key value pair, run the command 
+```
+real-db> $ SET key-string val-string 
+``` 
+To get a key  
+```
+real-db> $ GET key-string 
+``` 
+To get real-time data of a particular key
+real-db> $ WATCH key-string
 
 ## Concurrency and Reliability 
 - Proper connection management (Close watchers on disconnect) - ✔️ 
@@ -26,7 +50,7 @@ Real-DB is an in-memory real-time database with a focus on high performance, con
 - Loading from disk on startup  
 
 ## Performance Features
-- LRU cache for memory optimization
+- LRU cache for memory optimization - ✔️ 
 - Sharding support (manual for now)
 - Compression for large values 
 
