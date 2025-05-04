@@ -27,6 +27,10 @@ real-db> $ WATCH key-string
 
 ## Functionalities
 
+### Major milestones 
+- Persistance to secondary memory
+- Pub/sub model
+- Distributed caching
 ### Concurrency and Reliability 
 - Proper connection management (Close watchers on disconnect) - ✔️ 
 - Concurrent-safe access with sync.Map or channels 
