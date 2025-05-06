@@ -31,6 +31,10 @@ real-db> $ WATCH key-string
 - Persistance to secondary memory
 - Pub/sub model
 - Distributed caching
+   - Consistent hashing
+   - Local LRU Eviction
+   - Backup of Evictied keys to Persistance secondary storage
+   - If its cache miss -> persistant backup -> bring on to cache(in-memory) again. 
 ### Concurrency and Reliability 
 - Proper connection management (Close watchers on disconnect) - ✔️ 
 - Concurrent-safe access with sync.Map or channels 
