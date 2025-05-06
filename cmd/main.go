@@ -59,11 +59,11 @@ func main(){
 |     ██║  ██║███████╗██║  ██║███████╗ ██████╔╝██████╔╝     |
 |     ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝      |
 |                                                           |
-|                  Connected to real-db>                    |
+|                  Connected to real-db                     |
 '-----------------------------------------------------------'` + "\n")) 
 		conn.Write([]byte("real-db> "))  
 
-		remoteAddress := conn.RemoteAddr() 
+		remoteAddress := conn.RemoteAddr() // Logic to log the connected client detials [IP:PORT]
 		if tcpAddr, ok := remoteAddress.(*net.TCPAddr); ok {
 			ipAddress := tcpAddr.IP
 			portNumber := tcpAddr.Port
@@ -74,7 +74,7 @@ func main(){
 
  
 		go server.HandleConnection(conn)      // This infinite loop keeps looking for connections and wherever they come a seperate go routine is 
-										// created to handle the request ( seperate go routine for every client connected )
+											  // spawned to handle the request ( seperate go routine for every client connected )
 	}
   
 }
