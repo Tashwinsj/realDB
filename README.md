@@ -44,7 +44,7 @@ real-db> $ WATCH key-string
 ### Core Redis-like Features
 - Key Expiration (SET key value EX 10)
 - DELETE (DEL key) command - ✔️ 
-- Increment/Decrement (INCR, DECR)
+- Increment/Decrement (INCR, DECR) - ✔️ 
 - Multi-key operations (MGET, MSET)
 - Data types:
     - Strings ( already done )  

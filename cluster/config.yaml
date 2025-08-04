@@ -1,0 +1,8 @@
+nodes:
+  - name: node1
+    ip: 127.0.0.1
+    port: 6367
+
+  - name: node2
+    ip: 127.0.0.1
+    port: 6366

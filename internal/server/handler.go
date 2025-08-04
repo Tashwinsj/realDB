@@ -54,14 +54,29 @@ func HandleConnection(conn net.Conn){
 				conn.Write([]byte("real-db> "))
 				continue
 			}
-			db.HandleWatch(conn, args[1])  
+			db.HandleWatch(conn, args[1])   
+		
 		case "DEL" : 
 			if len(args) != 2 {
 				conn.Write([]byte("Usage : DEL key \n")) 
 				conn.Write([]byte("real-db> "))
 				continue
 			} 
-			db.HandleDelete(conn , args[1])
+			db.HandleDelete(conn , args[1]) 
+		case "INC" :
+			if len(args) != 2 {
+				conn.Write([]byte("Usage : INC key \n")) 
+				conn.Write([]byte("real-db> ")) 
+				continue 
+			} 
+			db.HandleINC(conn, args[1]) 
+		
+		case "DEC" :
+			if len(args) !=  2  {
+				conn.Write([]byte("Usage : DEC key \nreal-DB> ")) 
+				continue 
+			} 
+			db.HandleDEC(conn , args[1])
 		default : 
 			conn.Write([]byte("Unknow command! \n"))
 			conn.Write([]byte("real-db> "))

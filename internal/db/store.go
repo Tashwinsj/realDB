@@ -3,14 +3,15 @@ package db
 import (
 	"fmt"
 	"net"
-	"sync"
-	"github.com/sirupsen/logrus" 
 	"realDB/internal/cache"
+	"strconv"
+	"sync"
+	"github.com/sirupsen/logrus"
 ) 
 
 
 var (
-	lru = cache.NewLRUCache(25)
+	lru = cache.NewLRUCache(928202913952)
 	watchers = make(map[string][]net.Conn) 
 	mu		 	sync.RWMutex // synchornous mutex allows only one goroutine to lock and unlock at once
 )
@@ -44,7 +45,82 @@ func HandleGet( conn net.Conn , key string ) {
 	} 
 	logrus.Infof("GET %s", key)
 	conn.Write([]byte("real-db> "))
-}  
+}   
+
+func HandleINC( conn net.Conn , key string) {
+	mu.RLock()  
+	val , ok := lru.Get(key)  
+	mu.RUnlock()
+
+	// if the value is not present we treat it as zero
+	if !ok {
+		val = "0"
+	} 
+
+	intVal , err := strconv.Atoi(val) 
+	if err != nil {
+		conn.Write([]byte("ERR: value is not an integer \n real-db> ")) 
+		return 
+	}
+	
+	intVal++ 
+ 
+	newVal :=strconv.Itoa(intVal)  
+	mu.Lock()
+	lru.Set(key , newVal) 
+	mu.Unlock()
+
+	conns := watchers[key] 
+	for _, watcher := range conns {
+		if watcher != conn {
+			watcher.Write([]byte(fmt.Sprintf("WATCH : '%s' ---> '%s'\n", key, newVal)))
+			watcher.Write([]byte("real-db> "))
+		}
+	}  
+
+	logrus.Infof("INCR %s = %s", key, newVal)
+	conn.Write([]byte(fmt.Sprintf("%s\nreal-db> ", newVal)))
+
+	
+}
+
+
+func HandleDEC( conn net.Conn , key string) {
+	mu.RLock()  
+	val , ok := lru.Get(key)  
+	mu.RUnlock()
+
+	// if the value is not present return an error
+	if !ok {
+		conn.Write([]byte("ERR: Value not found in the DB \n real-db> "))  
+		return 
+	} 
+
+	intVal , err := strconv.Atoi(val) 
+	if err != nil {
+		conn.Write([]byte("ERR: value is not an integer \n real-db> ")) 
+		return 
+	}
+	
+	intVal--
+ 
+	newVal :=strconv.Itoa(intVal)  
+	mu.Lock()
+	lru.Set(key , newVal) 
+	mu.Unlock()
+
+	conns := watchers[key] 
+	for _, watcher := range conns {
+		if watcher != conn {
+			watcher.Write([]byte(fmt.Sprintf("WATCH : '%s' ---> '%s'\n", key, newVal)))
+			watcher.Write([]byte("real-db> "))
+		}
+	}  
+
+	logrus.Infof("INCR %s = %s", key, newVal)
+	conn.Write([]byte(fmt.Sprintf("%s\nreal-db> ", newVal)))
+}
+
 
 func HandleDelete(conn net.Conn , key string ){
 	mu.Lock()  
