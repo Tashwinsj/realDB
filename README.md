@@ -1,4 +1,4 @@
-# Real-DB 🧱 
+# Real-DB 🪨
 ### About Real-DB
 RealDB is a project I started to learn and explore the internals of distributed systems, in-memory databases, and high-performance storage. Built entirely in Go, RealDB follows a master–slave architecture and uses consistent hashing to evenly distribute load and ensure fault tolerance. It supports LRU eviction policies to gracefully handle memory overload and is concurrency-safe through mutex locking.
 
